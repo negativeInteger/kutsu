@@ -3,9 +3,18 @@ import { DashboardNavigation } from "../components/dashboard/DashboardNavigation
 import { CircleUser, MenuIcon } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
+import { getKindeServerSession, LogoutLink } from "@kinde-oss/kinde-auth-nextjs/server";
+import { redirect } from "next/navigation";
 
 
-export default function DashboardLayout({ children }: { children: React.ReactNode }) {
+export default async function DashboardLayout({ children }: { children: React.ReactNode }) {
+  const { getUser } = getKindeServerSession();
+  const user = await getUser();
+
+  if(!user || (user.email !== process.env.ADMIN_EMAIL)) {
+    return redirect("/");
+  } 
+
   return (
     <div className="flex w-full flex-col max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
        <header className="sticky top-0 flex h-16 items-center justify-between gap-4 border-b bg-white">
@@ -31,14 +40,10 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
                     <CircleUser className="h-5 w-5"/>
                 </Button>
            </DropdownMenuTrigger>
-            <DropdownMenuContent align="end">
-                <DropdownMenuLabel>
-                    My Account
-                </DropdownMenuLabel>
+           <DropdownMenuContent align="end">
+                <DropdownMenuLabel>My Account</DropdownMenuLabel>
                 <DropdownMenuSeparator />
-                <DropdownMenuItem>
-                    Logout
-                </DropdownMenuItem>
+                <DropdownMenuItem asChild><LogoutLink>Logout</LogoutLink></DropdownMenuItem>
             </DropdownMenuContent>
        </DropdownMenu>
        </header>
