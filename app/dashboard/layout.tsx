@@ -35,7 +35,7 @@ export default async function DashboardLayout({ children }: { children: React.Re
         </Sheet>
 
        <DropdownMenu>
-           <DropdownMenuTrigger>
+           <DropdownMenuTrigger asChild>
                 <Button variant="secondary" size="icon" className="rounded-full">
                     <CircleUser className="h-5 w-5"/>
                 </Button>
@@ -47,7 +47,9 @@ export default async function DashboardLayout({ children }: { children: React.Re
             </DropdownMenuContent>
        </DropdownMenu>
        </header>
-      {children}
+       <main className="my-5">
+         {children}
+       </main>
     </div>
   );
 }
